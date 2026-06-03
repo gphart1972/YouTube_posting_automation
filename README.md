@@ -43,7 +43,7 @@ This script automatically:
 - Thumbnail image  
 - Clean structured layout  
 
-- ✅ Lightweight (no external dependencies)
+- Lightweight (no external dependencies)
 
 ## 📸 Example Output
 

@@ -5,7 +5,7 @@
 This script automatically:
 
 - Checks a YouTube channel for new uploads
-- Posts new videos to a Discord channel
+- Posts new videos to a Discord channel or to a Slack Channel
 - Prevents duplicate posts using a local tracking file
 
 ---
@@ -18,6 +18,11 @@ This script automatically:
 - ✅ Discord embed with:
   - Clickable title
   - Thumbnail preview
+- ✅ Slack embed with:
+  - Bold title
+  - clickable link
+  - thumbnail image
+  - structured layout (Block Kit)
 - ✅ Lightweight (no external dependencies)
 
 ---

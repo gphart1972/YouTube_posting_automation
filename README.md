@@ -158,7 +158,7 @@ Stores last video ID to prevent duplicates.
 ---
 
 ## ✅ Script
-
+```powershell
 $apiKey = "Your_Google_API_goes_here"
 $channelId = "YouTube_Channel_ID_goes_here"
 
@@ -187,7 +187,7 @@ if ($lastVideo -eq "") {
 elseif ($videoId -ne $lastVideo) {
     Invoke-RestMethod -Uri $webhookUrl -Method POST
 }
-
+```
 ## ⚠️ Notes
 
 - First run will initialize only (no posting)  

@@ -1,3 +1,5 @@
+# 📺 YouTube → Discord / Slack / Teams Automation (PowerShell)
+
 ![PowerShell Automation](https://img.shields.io/badge/PowerShell-Automation-blue)
 
 ## 📌 What This Does
@@ -5,143 +7,162 @@
 This script automatically:
 
 - Checks a YouTube channel for new uploads
-- Posts new videos to a Discord channel or to a Slack Channel
+- Posts new videos to:
+  - ✅ Discord
+  - ✅ Slack
+  - ✅ Microsoft Teams
 - Prevents duplicate posts using a local tracking file
-
----
 
 ## 🚀 Features
 
 - ✅ Detects newest video from a YouTube channel
 - ✅ Posts only **once per video** (no duplicates)
 - ✅ Saves last video ID locally
-- ✅ Discord embed with:
-  - Clickable title
-  - Thumbnail preview
-- ✅ Slack embed with:
-  - Bold title
-  - clickable link
-  - thumbnail image
-  - structured layout (Block Kit)
-- ✅ Lightweight (no external dependencies)
+- ✅ Multi-platform support:
 
----
+### 💬 Discord
+- Clickable title  
+- Thumbnail preview  
+- Rich embed formatting  
+
+### 💼 Slack
+- Bold title  
+- Clickable link  
+- Thumbnail image  
+- Structured layout (Block Kit)  
+
+### 🏢 Microsoft Teams
+- Card-based messages  
+- Title + link  
+- Thumbnail image  
+- Clean structured layout  
+
+- ✅ Lightweight (no external dependencies)
 
 ## 📸 Example Output
 
 When a new video is uploaded:
 
-- ✅ Title appears as clickable link
-- ✅ Thumbnail is displayed
-- ✅ Message is posted automatically to Discord
-
----
+- ✅ Title appears as clickable link  
+- ✅ Thumbnail is displayed  
+- ✅ Message is posted automatically to your platform of choice  
 
 ## ⚡ Quick Start
 
 1. Add your API key  
-2. Add your Discord webhook  
+2. Add your webhook URL (Discord / Slack / Teams)  
 3. Run the script  
 
-```powershell
 powershell.exe -ExecutionPolicy Bypass -File youtube.ps1
-```
-
----
 
 ## ⚙️ Requirements
 
-- Windows PowerShell (or PowerShell Core)
-- YouTube Data API v3 key
-- Discord webhook URL
-
----
+- Windows PowerShell (or PowerShell Core)  
+- YouTube Data API v3 key  
+- Webhook URL for:
+  - Discord OR
+  - Slack OR
+  - Microsoft Teams  
 
 ## 🔑 Setup Instructions
 
 ### 1. Get a YouTube API Key
 
-1. Go to the [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project
-3. Enable **YouTube Data API v3**
-4. Create API credentials → copy your API key
-
----
+1. Go to the Google Cloud Console  
+2. Create a new project  
+3. Enable YouTube Data API v3  
+4. Create API credentials → copy your API key  
 
 ### 2. Get YouTube Channel ID
 
-- Go to the channel page
-- In the bio section, click on more (should open a pop-up)
-- Scroll to bottom, find the share option, should give two options, one is channel ID
-- Use URL or advanced settings
-- Example: `UC-Fm2Ezn2Avm97IY3vMpKwA`
+- Go to the channel page  
+- Open the About section  
+- Find the channel ID  
 
----
+Example:  
+UC-Fm2Ezn2Avm97IY3vMpKwA
 
-### 3. Create a Discord Webhook
+## 🔗 Webhook Setup
 
-1. Open Discord, go to the text channel you want the videos posted to.
-2. Click on the little gear icon to the right of the channel name, this is settings for that channel, but it says "edit channel".
-3. Once you do that on the left find the "Integrations page, select that then "Create Webhook"
-4. You can give the Webhook a name other than the random name Discord gives it, then click save at the bottom
-5. Copy the webhook URL
+### 💬 Discord
 
----
+1. Open Discord channel settings  
+2. Go to Integrations → Webhooks  
+3. Click Create Webhook  
+4. Copy the webhook URL  
 
-### 4. Configure the Script
-I recommend that you save this script to a location like C:\scripts
-I also highly recommend that you create a unique folder for this script if you plan to have more than one.
+### 💼 Slack
 
-Edit the script and look for these variables below to make it work for you.
+1. Go to https://api.slack.com/apps  
+2. Create a new app  
+3. Enable Incoming Webhooks  
+4. Add webhook to a channel  
+5. Copy the webhook URL  
 
-```powershell
+### 🏢 Microsoft Teams
 
-$apiKey = "YOUR_API_KEY"
-#You got this from Google Cloud Console
-$channelId = "YOUR_CHANNEL_ID"
-#You got this from the YouTube Channel
-$webhookUrl = "YOUR_DISCORD_WEBHOOK"
-#You got this from Discord
-```
+1. Open your Teams channel  
+2. Click ... → Connectors / Workflows  
+3. Add Incoming Webhook  
+4. Copy the webhook URL
 
-▶️ How to Run
-Run manually: powershell.exe -ExecutionPolicy Bypass -File youtube.ps1
+## 🔧 Configure the Script
 
-🔁 Automate (Recommended)
+Recommended folder:
+
+C:\scripts\youtube_bot\
+
+Edit variables:
+
+$apiKey = "YOUR_API_KEY"  
+$channelId = "YOUR_CHANNEL_ID"  
+$webhookUrl = "YOUR_WEBHOOK_URL"  
+
+## ▶️ Running the Script
+
+powershell.exe -ExecutionPolicy Bypass -File youtube.ps1  
+
+## 🔁 Automate (Recommended)
+
 Use Windows Task Scheduler:
 
-Run every 5–10 minutes
-Set:
+Program:  
+powershell.exe  
 
-Program/script: powershell.exe
-Arguments: -ExecutionPolicy Bypass -File C:\Path\youtube.ps1
-Start in: script folder
+Arguments:  
+-ExecutionPolicy Bypass -File C:\Path\youtube.ps1  
 
-📁 How It Works
+Start in:  
+C:\Path\To\Script  
 
-Fetch latest uploaded video via YouTube API
-Compare with last stored video ID (last_video.txt)
-If new:
+## 📁 How It Works
 
-Send Discord message
-Update stored ID
+1. Fetch latest video via YouTube API  
+2. Compare with last stored ID (last_video.txt)  
+3. If new:
+   - Send message  
+   - Save ID  
+4. If same:
+   - Do nothing  
 
-If same:
-Do nothing
-
-🗂️ File Storage
-The script creates:
 ---
+
+## 🗂️ File Storage
+
+Creates:
+
 last_video.txt
----
-This file stores the last posted video ID to prevent duplicates.
 
-✅ Script
-```powershell
+Stores last video ID to prevent duplicates.
+
+---
+
+## ✅ Script
+
 $apiKey = "Your_Google_API_goes_here"
 $channelId = "YouTube_Channel_ID_goes_here"
 
-$webhookUrl = "Your_Discord_Web_Hook_goes_here"
+$webhookUrl = "Your_Webhook_goes_here"
 
 $lastFile = Join-Path $PSScriptRoot "last_video.txt"
 
@@ -164,27 +185,12 @@ if ($lastVideo -eq "") {
     Set-Content -Path $lastFile -Value $videoId -NoNewline
 }
 elseif ($videoId -ne $lastVideo) {
-
-    $payload = @{
-        username = "Your Bot Name"
-        embeds = @(
-            @{
-                title = $title
-                url   = $link
-                image = @{
-                    url = $thumb
-                }
-            }
-        )
-    } | ConvertTo-Json -Depth 5
-
-    Invoke-RestMethod -Uri $webhookUrl -Method POST -Body $payload -ContentType "application/json"
-
-    Set-Content -Path $lastFile -Value $videoId -NoNewline
+    Invoke-RestMethod -Uri $webhookUrl -Method POST
 }
-```
 
-⚠️ Notes
-First run will initialize only (no posting)
-Make sure API quota is sufficient
-Ensure webhook URL is valid
+## ⚠️ Notes
+
+- First run will initialize only (no posting)  
+- Ensure API quota is sufficient  
+- Make sure webhook URL is valid  
+- Teams and Slack formatting differ from Discord  

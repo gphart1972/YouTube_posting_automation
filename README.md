@@ -51,7 +51,7 @@ When a new video is uploaded:
 
 - Go to the channel page
 - In the bio section, click on more (should open a pop-up)
-- scroll to bottom, find the share option, should give two options, one is channel ID
+- Scroll to bottom, find the share option, should give two options, one is channel ID
 - Use URL or advanced settings
 - Example: `UC-Fm2Ezn2Avm97IY3vMpKwA`
 
@@ -60,8 +60,8 @@ When a new video is uploaded:
 ### 3. Create a Discord Webhook
 
 1. Open Discord, go to the text channel you want the videos posted to.
-2. Click on the little gear icon to the right of the channel name, this is settings for that channel, but it says edit channel
-3. once you do that on the left find the "Integrations page, select that then "Create Webhook"
+2. Click on the little gear icon to the right of the channel name, this is settings for that channel, but it says "edit channel".
+3. Once you do that on the left find the "Integrations page, select that then "Create Webhook"
 4. You can give the Webhook a name other than the random name Discord gives it, then click save at the bottom
 5. Copy the webhook URL
 
@@ -97,18 +97,18 @@ Arguments: -ExecutionPolicy Bypass -File C:\Path\youtube.ps1
 Start in: script folder
 
 📁 How It Works
-The script:
 
-Fetches the latest video from YouTube API
-Compares video ID with saved value (last_video.txt)
+Fetch latest uploaded video via YouTube API
+Compare with last stored video ID (last_video.txt)
 If new:
 
-Sends message to Discord
-Updates stored ID
+Send Discord message
+Update stored ID
+
 
 If same:
 
-Does nothing
+Do nothing
 
 🗂️ File Storage
 The script creates:
@@ -116,8 +116,55 @@ last_video.txt
 
 This file stores the last posted video ID to prevent duplicates.
 
-⚠️ Notes
+✅ Script
+```powershell
+$apiKey = "Your_Google_API_goes_here"
+$channelId = "YouTube_Channel_ID_goes_here"
 
+$webhookUrl = "Your_Discord_Web_Hook_goes_here"
+
+$lastFile = Join-Path $PSScriptRoot "last_video.txt"
+
+if (Test-Path $lastFile) {
+    $lastVideo = (Get-Content $lastFile -Raw).Trim()
+} else {
+    $lastVideo = ""
+}
+
+$url = "https://www.googleapis.com/youtube/v3/search?key=$apiKey&channelId=$channelId&part=snippet,id&order=date&maxResults=1"
+
+$response = Invoke-RestMethod -Uri $url
+
+$videoId = $response.items[0].id.videoId
+$title   = $response.items[0].snippet.title
+$link    = "https://www.youtube.com/watch?v=$videoId"
+$thumb   = $response.items[0].snippet.thumbnails.high.url
+
+if ($lastVideo -eq "") {
+    Set-Content -Path $lastFile -Value $videoId -NoNewline
+}
+elseif ($videoId -ne $lastVideo) {
+
+    $payload = @{
+        username = "Your Bot Name"
+        embeds = @(
+            @{
+                title = $title
+                url   = $link
+                image = @{
+                    url = $thumb
+                }
+            }
+        )
+    } | ConvertTo-Json -Depth 5
+
+    Invoke-RestMethod -Uri $webhookUrl -Method POST -Body $payload -ContentType "application/json"
+
+    Set-Content -Path $lastFile -Value $videoId -NoNewline
+}
+```
+
+⚠️ Notes
 First run will initialize only (no posting)
 Make sure API quota is sufficient
 Ensure webhook URL is valid

@@ -81,3 +81,43 @@ $channelId = "YOUR_CHANNEL_ID"
 #You got this from the YouTube Channel
 $webhookUrl = "YOUR_DISCORD_WEBHOOK"
 #You got this from Discord
+```
+
+▶️ How to Run
+Run manually: powershell.exe -ExecutionPolicy Bypass -File youtube.ps1
+
+🔁 Automate (Recommended)
+Use Windows Task Scheduler:
+
+Run every 5–10 minutes
+Set:
+
+Program/script: powershell.exe
+Arguments: -ExecutionPolicy Bypass -File C:\Path\youtube.ps1
+Start in: script folder
+
+📁 How It Works
+The script:
+
+Fetches the latest video from YouTube API
+Compares video ID with saved value (last_video.txt)
+If new:
+
+Sends message to Discord
+Updates stored ID
+
+If same:
+
+Does nothing
+
+🗂️ File Storage
+The script creates:
+last_video.txt
+
+This file stores the last posted video ID to prevent duplicates.
+
+⚠️ Notes
+
+First run will initialize only (no posting)
+Make sure API quota is sufficient
+Ensure webhook URL is valid

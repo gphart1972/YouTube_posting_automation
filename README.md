@@ -1,8 +1,13 @@
-# YouTube_posting_automation
-This repo will provide a PowerShell script that can be used to automate posting of YouTube videos to apps like Discord.
-# 📺 YouTube to Discord Notifier (PowerShell)
+```markdown
+https://img.shields.io/badge/PowerShell-Automation-blue
+```
+## 📌 What This Does
 
-A simple PowerShell script that monitors a YouTube channel and automatically posts new uploads to a Discord channel using a webhook — with rich embed previews.
+This script automatically:
+
+- Checks a YouTube channel for new uploads
+- Posts new videos to a Discord channel
+- Prevents duplicate posts using a local tracking file
 
 ---
 
@@ -25,6 +30,18 @@ When a new video is uploaded:
 - ✅ Title appears as clickable link
 - ✅ Thumbnail is displayed
 - ✅ Message is posted automatically to Discord
+
+---
+
+## ⚡ Quick Start
+
+1. Add your API key  
+2. Add your Discord webhook  
+3. Run the script  
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File youtube.ps1
+```
 
 ---
 
@@ -105,15 +122,14 @@ If new:
 Send Discord message
 Update stored ID
 
-
 If same:
-
 Do nothing
 
 🗂️ File Storage
 The script creates:
+---
 last_video.txt
-
+---
 This file stores the last posted video ID to prevent duplicates.
 
 ✅ Script

@@ -109,19 +109,19 @@ UC-Fm2Ezn2Avm97IY3vMpKwA
 ## 🔧 Configure the Script
 
 Recommended folder:
-
+```
 C:\scripts\youtube_bot\
-
+```
 Edit variables:
-
+```powershell
 $apiKey = "YOUR_API_KEY"  
 $channelId = "YOUR_CHANNEL_ID"  
 $webhookUrl = "YOUR_WEBHOOK_URL"  
-
+```
 ## ▶️ Running the Script
-
+```powershell
 powershell.exe -ExecutionPolicy Bypass -File youtube.ps1  
-
+```
 ## 🔁 Automate (Recommended)
 
 Use Windows Task Scheduler:

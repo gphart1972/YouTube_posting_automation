@@ -1,0 +1,44 @@
+$apiKey = "Your_Google_API_goes_here"
+$channelId = "YouTube_Channel_ID_goes_here"
+
+$webhookUrl = "Your_Discord_Web_Hook_goes_here"
+
+$lastFile = Join-Path $PSScriptRoot "last_video.txt"
+
+if (Test-Path $lastFile) {
+    $lastVideo = (Get-Content $lastFile -Raw).Trim()
+} else {
+    $lastVideo = ""
+}
+
+$url = "https://www.googleapis.com/youtube/v3/search?key=$apiKey&channelId=$channelId&part=snippet,id&order=date&maxResults=1"
+
+$response = Invoke-RestMethod -Uri $url
+
+$videoId = $response.items[0].id.videoId
+$title   = $response.items[0].snippet.title
+$link    = "https://www.youtube.com/watch?v=$videoId"
+$thumb   = $response.items[0].snippet.thumbnails.high.url
+
+if ($lastVideo -eq "") {
+    Set-Content -Path $lastFile -Value $videoId -NoNewline
+}
+elseif ($videoId -ne $lastVideo) {
+
+    $payload = @{
+        username = "Your Bot Name"
+        embeds = @(
+            @{
+                title = $title
+                url   = $link
+                image = @{
+                    url = $thumb
+                }
+            }
+        )
+    } | ConvertTo-Json -Depth 5
+
+    Invoke-RestMethod -Uri $webhookUrl -Method POST -Body $payload -ContentType "application/json"
+
+    Set-Content -Path $lastFile -Value $videoId -NoNewline
+}

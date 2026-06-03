@@ -126,15 +126,18 @@ powershell.exe -ExecutionPolicy Bypass -File youtube.ps1
 
 Use Windows Task Scheduler:
 
-Program:  
+Program:
+```
 powershell.exe  
-
-Arguments:  
+```
+Arguments: 
+```
 -ExecutionPolicy Bypass -File C:\Path\youtube.ps1  
-
+```
 Start in:  
+```
 C:\Path\To\Script  
-
+```
 ## 📁 How It Works
 
 1. Fetch latest video via YouTube API  
@@ -150,9 +153,9 @@ C:\Path\To\Script
 ## 🗂️ File Storage
 
 Creates:
-
+```
 last_video.txt
-
+```
 Stores last video ID to prevent duplicates.
 
 ---

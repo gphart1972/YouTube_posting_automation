@@ -1,6 +1,5 @@
-[```markdown
-https://img.shields.io/badge/PowerShell-Automation-blue
-```](https://img.shields.io/badge/PowerShell-Automation-blue)
+![PowerShell Automation](https://img.shields.io/badge/PowerShell-Automation-blue)
+
 ## 📌 What This Does
 
 This script automatically:

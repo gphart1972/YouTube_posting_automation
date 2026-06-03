@@ -20,6 +20,12 @@ This script automatically:
 - ✅ Saves last video ID locally
 - ✅ Multi-platform support:
 
+| Platform | Supported | Format |
+|----------|----------|--------|
+| Discord  | ✅ | Embeds |
+| Slack    | ✅ | Block Kit |
+| Teams    | ✅ | Message Cards |
+
 ### 💬 Discord
 - Clickable title  
 - Thumbnail preview  

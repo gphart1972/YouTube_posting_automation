@@ -73,6 +73,8 @@ I also highly recommend that you create a unique folder for this script if you p
 
 Edit the script and look for these variables below to make it work for you.
 
+```powershell
+
 $apiKey = "YOUR_API_KEY"
 #You got this from Google Cloud Console
 $channelId = "YOUR_CHANNEL_ID"

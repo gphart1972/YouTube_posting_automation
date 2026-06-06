@@ -47,13 +47,14 @@ Livestreams are ignored
 
 Example console output:
 
-Code
+```powershell
 ENTRY: videoId=3Z9zZdLRV3E  title='Dont cross the Stream(S)'
   -> Skipping livestream based on TITLE
 ENTRY: videoId=GD3IdR-bTLU  title='Mummy Bread'
   -> Using this entry
 New upload from Habitual Linecrosser: Mummy Bread
 Posted to Discord
+```
 ⚡ Quick Start
 Clone this repository
 
@@ -65,8 +66,9 @@ Run the script manually or via Task Scheduler
 
 Example:
 
-powershell
+```powershell
 powershell.exe -ExecutionPolicy Bypass -File General_Topic_YT_mcms.ps1
+```
 ⚙️ Requirements
 Windows PowerShell or PowerShell Core
 
@@ -91,21 +93,24 @@ Paste it into the script
 1. Add your channels
 Inside the script:
 
-powershell
+```powershell
 $Channels = @{
     "CHANNEL_ID_1" = "Friendly Name 1"
     "CHANNEL_ID_2" = "Friendly Name 2"
 }
+```
 Example:
 
-powershell
+```powershell
 $Channels = @{
     "UC6ysC3YUZbjScBKZlNLrmtQ" = "Habitual Linecrosser"
     "UC_T3Zsw2257Ke-g3F20ZCRA" = "The Fat Electrician"
 }
+```
 2. Add your Discord webhook
-powershell
+```powershell
 $webhookUrl = "https://discord.com/api/webhooks/XXXX/XXXX"
+```
 🗂️ How It Works
 Script fetches the RSS feed for each channel
 
@@ -127,26 +132,31 @@ Does nothing
 
 Tracking files look like:
 
-Code
+```Code
 last_video_<channelId>.txt
+```
 ▶️ Running the Script
 Manual run:
 
-powershell
-powershell.exe -ExecutionPolicy Bypass -File General_Topic_YT_mcms.ps1
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File your_script_name.ps1
+```
 🔁 Automate with Task Scheduler
 Program:
 
-Code
+```Code
 powershell.exe
+```
 Arguments:
 
-Code
+```Code
 -ExecutionPolicy Bypass -File C:\Path\General_Topic_YT_mcms.ps1
+```
 Start in:
 
-Code
+```Code
 C:\Path\
+```
 Set it to run every 5–15 minutes.
 
 📁 Script (RSS‑Based, Livestream‑Skipping)

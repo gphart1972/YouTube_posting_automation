@@ -1,205 +1,169 @@
-# 📺 YouTube → Discord / Slack / Teams Automation (PowerShell)
+📺 YouTube → Discord Automation (PowerShell, RSS‑Based, No API Key)
+https://img.shields.io/badge/PowerShell-Automation-blue
 
-![PowerShell Automation](https://img.shields.io/badge/PowerShell-Automation-blue)
+📌 What This Script Does
+This PowerShell script automatically:
 
-## 📌 What This Does
+Monitors multiple YouTube channels for new uploads
 
-This script automatically:
+Uses the official YouTube RSS feed (no API key, no quotas, no cost)
 
-- Checks a YouTube channel for new uploads
-- Posts new videos to:
-  - ✅ Discord
-  - ✅ Slack
-  - ✅ Microsoft Teams
-- Prevents duplicate posts using a local tracking file
+Skips livestreams and upcoming streams
 
-## 🚀 Features
+Posts new uploads to Discord via webhook
 
-- ✅ Detects newest video from a YouTube channel
-- ✅ Posts only **once per video** (no duplicates)
-- ✅ Saves last video ID locally
-- ✅ Multi-platform support:
+Prevents duplicate posts using per‑channel tracking files
 
-| Platform | Supported | Format |
-|----------|----------|--------|
-| Discord  | ✅ | Embeds |
-| Slack    | ✅ | Block Kit |
-| Teams    | ✅ | Message Cards |
+This is a lightweight, zero‑dependency, zero‑cost YouTube → Discord automation.
 
-### 💬 Discord
-- Clickable title  
-- Thumbnail preview  
-- Rich embed formatting  
+🚀 Features
+✅ No API key required (RSS feed only)
 
-### 💼 Slack
-- Bold title  
-- Clickable link  
-- Thumbnail image  
-- Structured layout (Block Kit)  
+✅ Monitors multiple channels
 
-### 🏢 Microsoft Teams
-- Card-based messages  
-- Title + link  
-- Thumbnail image  
-- Clean structured layout  
+✅ Skips livestreams using title‑based filtering
 
-- Lightweight (no external dependencies)
+✅ Posts only once per upload
 
-## 📸 Example Output
+✅ Clean Discord embed formatting
 
-When a new video is uploaded:
+✅ Per‑channel tracking files
 
-- ✅ Title appears as clickable link  
-- ✅ Thumbnail is displayed  
-- ✅ Message is posted automatically to your platform of choice  
+✅ No quotas, no authentication, no billing
 
-## ⚡ Quick Start
+✅ Works on PowerShell 5.1 and 7+
 
-1. Add your API key  
-2. Add your webhook URL (Discord / Slack / Teams)  
-3. Run the script  
+📸 Example Output
+When a new upload is detected:
 
-powershell.exe -ExecutionPolicy Bypass -File youtube.ps1
+Title appears as a clickable link
 
-## ⚙️ Requirements
+Thumbnail is displayed
 
-- Windows PowerShell (or PowerShell Core)  
-- YouTube Data API v3 key  
-- Webhook URL for:
-  - Discord OR
-  - Slack OR
-  - Microsoft Teams  
+Message is posted automatically to Discord
 
-## 🔑 Setup Instructions
+Livestreams are ignored
 
-### 1. Get a YouTube API Key
+Example console output:
 
-1. Go to the Google Cloud Console  
-2. Create a new project  
-3. Enable YouTube Data API v3  
-4. Create API credentials → copy your API key  
+Code
+ENTRY: videoId=3Z9zZdLRV3E  title='Dont cross the Stream(S)'
+  -> Skipping livestream based on TITLE
+ENTRY: videoId=GD3IdR-bTLU  title='Mummy Bread'
+  -> Using this entry
+New upload from Habitual Linecrosser: Mummy Bread
+Posted to Discord
+⚡ Quick Start
+Clone this repository
 
-### 2. Get YouTube Channel ID
+Edit the script to add your YouTube channels
 
-- Go to the channel page  
-- Open the About section  
-- Find the channel ID  
+Add your Discord webhook URL
 
-Example:  
-UC-Fm2Ezn2Avm97IY3vMpKwA
+Run the script manually or via Task Scheduler
 
-## 🔗 Webhook Setup
+Example:
 
-### 💬 Discord
+powershell
+powershell.exe -ExecutionPolicy Bypass -File General_Topic_YT_mcms.ps1
+⚙️ Requirements
+Windows PowerShell or PowerShell Core
 
-1. Open Discord channel settings  
-2. Go to Integrations → Webhooks  
-3. Click Create Webhook  
-4. Copy the webhook URL  
+A Discord webhook URL
 
-### 💼 Slack
+Internet access
 
-1. Go to https://api.slack.com/apps  
-2. Create a new app  
-3. Enable Incoming Webhooks  
-4. Add webhook to a channel  
-5. Copy the webhook URL  
+No API key required
 
-### 🏢 Microsoft Teams
+🔗 Discord Webhook Setup
+Open your Discord server
 
-1. Open your Teams channel  
-2. Click ... → Connectors / Workflows  
-3. Add Incoming Webhook  
-4. Copy the webhook URL
+Go to Channel Settings → Integrations → Webhooks
 
-## 🔧 Configure the Script
+Click Create Webhook
 
-Recommended folder:
-```
-C:\scripts\youtube_bot\
-```
-Edit variables:
-```powershell
-$apiKey = "YOUR_API_KEY"  
-$channelId = "YOUR_CHANNEL_ID"  
-$webhookUrl = "YOUR_WEBHOOK_URL"  
-```
-## ▶️ Running the Script
-```powershell
-powershell.exe -ExecutionPolicy Bypass -File youtube.ps1  
-```
-## 🔁 Automate (Recommended)
+Copy the webhook URL
 
-Use Windows Task Scheduler:
+Paste it into the script
 
+🧩 Configuration
+1. Add your channels
+Inside the script:
+
+powershell
+$Channels = @{
+    "CHANNEL_ID_1" = "Friendly Name 1"
+    "CHANNEL_ID_2" = "Friendly Name 2"
+}
+Example:
+
+powershell
+$Channels = @{
+    "UC6ysC3YUZbjScBKZlNLrmtQ" = "Habitual Linecrosser"
+    "UC_T3Zsw2257Ke-g3F20ZCRA" = "The Fat Electrician"
+}
+2. Add your Discord webhook
+powershell
+$webhookUrl = "https://discord.com/api/webhooks/XXXX/XXXX"
+🗂️ How It Works
+Script fetches the RSS feed for each channel
+
+It loops through entries and skips livestreams
+
+It selects the newest real upload
+
+Compares it to the per‑channel tracking file
+
+If new:
+
+Posts to Discord
+
+Saves the video ID
+
+If same:
+
+Does nothing
+
+Tracking files look like:
+
+Code
+last_video_<channelId>.txt
+▶️ Running the Script
+Manual run:
+
+powershell
+powershell.exe -ExecutionPolicy Bypass -File General_Topic_YT_mcms.ps1
+🔁 Automate with Task Scheduler
 Program:
-```
-powershell.exe  
-```
-Arguments: 
-```
--ExecutionPolicy Bypass -File C:\Path\youtube.ps1  
-```
-Start in:  
-```
-C:\Path\To\Script  
-```
-## 📁 How It Works
 
-1. Fetch latest video via YouTube API  
-2. Compare with last stored ID (last_video.txt)  
-3. If new:
-   - Send message  
-   - Save ID  
-4. If same:
-   - Do nothing  
+Code
+powershell.exe
+Arguments:
 
----
+Code
+-ExecutionPolicy Bypass -File C:\Path\General_Topic_YT_mcms.ps1
+Start in:
 
-## 🗂️ File Storage
+Code
+C:\Path\
+Set it to run every 5–15 minutes.
 
-Creates:
-```
-last_video.txt
-```
-Stores last video ID to prevent duplicates.
+📁 Script (RSS‑Based, Livestream‑Skipping)
+Your repo should include the full script file, but here is the high‑level summary:
 
----
+Uses YouTube RSS feed
 
-## ✅ Script
-```powershell
-$apiKey = "Your_Google_API_goes_here"
-$channelId = "YouTube_Channel_ID_goes_here"
+Skips livestreams by filtering titles containing “live” or “stream”
 
-$webhookUrl = "Your_Webhook_goes_here"
+Posts real uploads to Discord
 
-$lastFile = Join-Path $PSScriptRoot "last_video.txt"
+Maintains per‑channel tracking files
 
-if (Test-Path $lastFile) {
-    $lastVideo = (Get-Content $lastFile -Raw).Trim()
-} else {
-    $lastVideo = ""
-}
+⚠️ Notes
+First run initializes tracking files (no posting)
 
-$url = "https://www.googleapis.com/youtube/v3/search?key=$apiKey&channelId=$channelId&part=snippet,id&order=date&maxResults=1"
+Livestreams are skipped automatically
 
-$response = Invoke-RestMethod -Uri $url
+If you want to force a repost, delete the tracking file
 
-$videoId = $response.items[0].id.videoId
-$title   = $response.items[0].snippet.title
-$link    = "https://www.youtube.com/watch?v=$videoId"
-$thumb   = $response.items[0].snippet.thumbnails.high.url
-
-if ($lastVideo -eq "") {
-    Set-Content -Path $lastFile -Value $videoId -NoNewline
-}
-elseif ($videoId -ne $lastVideo) {
-    Invoke-RestMethod -Uri $webhookUrl -Method POST
-}
-```
-## ⚠️ Notes
-
-- First run will initialize only (no posting)  
-- Ensure API quota is sufficient  
-- Make sure webhook URL is valid  
-- Teams and Slack formatting differ from Discord  
+Works with any number of channels

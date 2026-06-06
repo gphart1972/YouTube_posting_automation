@@ -1,8 +1,9 @@
-📺 YouTube → Discord Automation (PowerShell, RSS‑Based, No API Key)
+# 📺 YouTube → Discord Automation
+(PowerShell, RSS‑Based, No API Key)
 
 ![PowerShell Automation](https://img.shields.io/badge/PowerShell-Automation-blue)
 
-📌 What This Script Does
+# 📌 What This Script Does
 This PowerShell script automatically:
 
 Monitors multiple YouTube channels for new uploads
@@ -17,7 +18,7 @@ Prevents duplicate posts using per‑channel tracking files
 
 This is a lightweight, zero‑dependency, zero‑cost YouTube → Discord automation.
 
-🚀 Features
+# 🚀 Features
 ✅ No API key required (RSS feed only)
 
 ✅ Monitors multiple channels
@@ -34,7 +35,7 @@ This is a lightweight, zero‑dependency, zero‑cost YouTube → Discord automa
 
 ✅ Works on PowerShell 5.1 and 7+
 
-📸 Example Output
+# 📸 Example Output
 When a new upload is detected:
 
 Title appears as a clickable link
@@ -55,7 +56,7 @@ ENTRY: videoId=GD3IdR-bTLU  title='Mummy Bread'
 New upload from Habitual Linecrosser: Mummy Bread
 Posted to Discord
 ```
-⚡ Quick Start
+# ⚡ Quick Start
 Clone this repository
 
 Edit the script to add your YouTube channels
@@ -69,7 +70,7 @@ Example:
 ```powershell
 powershell.exe -ExecutionPolicy Bypass -File General_Topic_YT_mcms.ps1
 ```
-⚙️ Requirements
+# ⚙️ Requirements
 Windows PowerShell or PowerShell Core
 
 A Discord webhook URL
@@ -78,7 +79,7 @@ Internet access
 
 No API key required
 
-🔗 Discord Webhook Setup
+# 🔗 Discord Webhook Setup
 Open your Discord server
 
 Go to Channel Settings → Integrations → Webhooks
@@ -89,7 +90,7 @@ Copy the webhook URL
 
 Paste it into the script
 
-🧩 Configuration
+# 🧩 Configuration
 1. Add your channels
 Inside the script:
 
@@ -111,7 +112,7 @@ $Channels = @{
 ```powershell
 $webhookUrl = "https://discord.com/api/webhooks/XXXX/XXXX"
 ```
-🗂️ How It Works
+# 🗂️ How It Works
 Script fetches the RSS feed for each channel
 
 It loops through entries and skips livestreams
@@ -135,13 +136,13 @@ Tracking files look like:
 ```Code
 last_video_<channelId>.txt
 ```
-▶️ Running the Script
+# ▶️ Running the Script
 Manual run:
 
 ```powershell
 powershell.exe -ExecutionPolicy Bypass -File your_script_name.ps1
 ```
-🔁 Automate with Task Scheduler
+# 🔁 Automate with Task Scheduler
 Program:
 
 ```Code
@@ -159,7 +160,7 @@ C:\Path\
 ```
 Set it to run every 5–15 minutes.
 
-📁 Script (RSS‑Based, Livestream‑Skipping)
+# 📁 Script (RSS‑Based, Livestream‑Skipping)
 Your repo should include the full script file, but here is the high‑level summary:
 
 Uses YouTube RSS feed
@@ -170,7 +171,7 @@ Posts real uploads to Discord
 
 Maintains per‑channel tracking files
 
-⚠️ Notes
+# ⚠️ Notes
 First run initializes tracking files (no posting)
 
 Livestreams are skipped automatically

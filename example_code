@@ -1,44 +1,127 @@
-$apiKey = "Your_Google_API_goes_here"
-$channelId = "YouTube_Channel_ID_goes_here"
+# ==================================================
+# General Topic YouTube multi channel monitor script
+# (RSS-based, no API key required)
+# Livestreams excluded by TITLE keyword
+# ==================================================
 
-$webhookUrl = "Your_Discord_Web_Hook_goes_here"
+$webhookUrl = "https://discord.com/api/webhooks/<YOUR_DISCROD_WEBHOOK_GOES_HERE>"
 
-$lastFile = Join-Path $PSScriptRoot "last_video.txt"
-
-if (Test-Path $lastFile) {
-    $lastVideo = (Get-Content $lastFile -Raw).Trim()
-} else {
-    $lastVideo = ""
+# --- Channels to Monitor ---
+# Format: ChannelID = FriendlyName
+$Channels = @{
+    "UC123456789ABCDEFGH1211" = "Example_username"
+    "UCZXYAD!#$%^&@**(*^&@#^" = "Other_example_username"
 }
 
-$url = "https://www.googleapis.com/youtube/v3/search?key=$apiKey&channelId=$channelId&part=snippet,id&order=date&maxResults=1"
+foreach ($channelId in $Channels.Keys) {
 
-$response = Invoke-RestMethod -Uri $url
+    $channelName = $Channels[$channelId]
 
-$videoId = $response.items[0].id.videoId
-$title   = $response.items[0].snippet.title
-$link    = "https://www.youtube.com/watch?v=$videoId"
-$thumb   = $response.items[0].snippet.thumbnails.high.url
+    # Per‑channel state file
+    $lastFile = Join-Path $PSScriptRoot "last_video_$channelId.txt"
 
-if ($lastVideo -eq "") {
-    Set-Content -Path $lastFile -Value $videoId -NoNewline
-}
-elseif ($videoId -ne $lastVideo) {
+    # Load last video ID
+    if (Test-Path $lastFile) {
+        $lastVideo = (Get-Content $lastFile -Raw).Trim()
+    } else {
+        $lastVideo = ""
+    }
 
-    $payload = @{
-        username = "Your Bot Name"
-        embeds = @(
-            @{
-                title = $title
-                url   = $link
-                image = @{
-                    url = $thumb
+    # Fetch RSS feed
+    $rssUrl = "https://www.youtube.com/feeds/videos.xml?channel_id=$channelId"
+
+    try {
+        $raw = Invoke-WebRequest -Uri $rssUrl -UseBasicParsing -ErrorAction Stop
+        $xml = [xml]$raw.Content
+    } catch {
+        Write-Host "Failed to fetch RSS for $channelName"
+        continue
+    }
+
+    # Register namespaces
+    $ns = New-Object System.Xml.XmlNamespaceManager($xml.NameTable)
+    $ns.AddNamespace("atom", "http://www.w3.org/2005/Atom")
+    $ns.AddNamespace("yt", "http://www.youtube.com/xml/schemas/2015")
+    $ns.AddNamespace("media", "http://search.yahoo.com/mrss/")
+
+    # Extract all entries
+    $entries = $xml.SelectNodes("//atom:entry", $ns)
+
+    if ($entries.Count -eq 0) {
+        Write-Host "No entries found for $channelName"
+        continue
+    }
+
+    # Find the first NON-livestream entry (TITLE filter)
+    $entry = $null
+
+    foreach ($e in $entries) {
+
+        $vid   = $e.SelectSingleNode("yt:videoId", $ns).InnerText
+        $title = $e.SelectSingleNode("atom:title", $ns).InnerText
+
+        Write-Host "ENTRY: videoId=$vid  title='$title'"
+
+        # Skip livestreams based on TITLE keyword
+        if ($title -match "(?i)live|stream") {
+            Write-Host "  -> Skipping livestream based on TITLE for $channelName"
+            continue
+        }
+
+        Write-Host "  -> Using this entry for $channelName"
+        $entry = $e
+        break
+    }
+
+    if (-not $entry) {
+        Write-Host "No non-livestream uploads found for $channelName"
+        continue
+    }
+
+    # Extract fields
+    $videoId = $entry.SelectSingleNode("yt:videoId", $ns).InnerText.Trim()
+    $title   = $entry.SelectSingleNode("atom:title", $ns).InnerText.Trim()
+    $link    = $entry.SelectSingleNode("atom:link[@rel='alternate']", $ns).href.Trim()
+    $thumb   = $entry.SelectSingleNode("media:group/media:thumbnail", $ns).url.Trim()
+
+    # First run → initialize only
+    if ($lastVideo -eq "") {
+        Set-Content -Path $lastFile -Value $videoId -NoNewline
+        Write-Host "Initialized $channelName with latest upload"
+        continue
+    }
+
+    # New upload detected
+    if ($videoId -ne $lastVideo) {
+
+        Write-Host "New upload from ${channelName}: $title"
+
+        # --- Discord Embed with "From: <channel>" ---
+        $payload = @{
+            username = "Darth EagleEye"
+            embeds = @(
+                @{
+                    title = "From: ${channelName}"
+                    description = $title
+                    url = $link
+                    image = @{
+                        url = $thumb
+                    }
                 }
-            }
-        )
-    } | ConvertTo-Json -Depth 5
+            )
+        } | ConvertTo-Json -Depth 5
 
-    Invoke-RestMethod -Uri $webhookUrl -Method POST -Body $payload -ContentType "application/json"
+        try {
+            Invoke-RestMethod -Uri $webhookUrl -Method POST -Body $payload -ContentType "application/json"
+            Write-Host "Posted to Discord for $channelName"
+        } catch {
+            Write-Host "Failed to send Discord post for $channelName"
+        }
 
-    Set-Content -Path $lastFile -Value $videoId -NoNewline
+        # Save new video ID
+        Set-Content -Path $lastFile -Value $videoId -NoNewline
+    }
+    else {
+        Write-Host "No new upload for $channelName"
+    }
 }

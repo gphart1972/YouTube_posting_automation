@@ -1,4 +1,5 @@
 📺 YouTube → Discord Automation (PowerShell, RSS‑Based, No API Key)
+
 https://img.shields.io/badge/PowerShell-Automation-blue
 
 📌 What This Script Does
